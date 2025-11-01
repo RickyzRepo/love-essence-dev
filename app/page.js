@@ -1,6 +1,6 @@
 import Image from "next/image";
-import logo from "../public/picture/logo-nobg.png";
-import heroImage from "../public/picture/Flower_banner_png.png";
+import logo from "./picture/logo-nobg.png";
+import heroImage from "./picture/Flower_banner_png.png";
 
 export default function Home() {
   return (
