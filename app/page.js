@@ -2,43 +2,13 @@ import Image from "next/image";
 import logo from "./picture/logo-nobg.png";
 import heroImage from "./picture/Flower_banner_png.png";
 import HomePage_ProductCircularCard from "./components/HomePage_ProductCIrcularCard";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen justify-center bg-[#F3F3F3] font-sans ">
       <main className="max-w-[1800px] w-full flex flex-col items-center">
-        <div className="w-full h-36 flex flex-col items-center justify-center">
-          <nav className="max-w-[1800px] w-full lg:w-3/4 hidden lg:flex flex-row gap-8 items-center justify-between">
-            <ul className="flex flex-row gap-10 text-xl">
-              <li className="pb-4 "><div className="cursor-pointer hover:underline hover:underline-offset-20">Home</div></li>
-              <li className="pb-4 "><div className="cursor-pointer hover:underline hover:underline-offset-20">Product</div></li>
-              <li className="pb-4 "><div className="cursor-pointer hover:underline hover:underline-offset-20">About</div></li>
-            </ul>
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-              <Image
-                src={logo}
-                alt="Logo"
-                width={300}
-                height={300}
-              />
-            </div>
-            <div className="font-semibold text-3xl">Cart</div>
-          </nav>
-
-          {/* // Mobile Navigation */}
-          <nav className="w-full lg:hidden flex flex-row gap-8 items-center justify-between px-4">
-            <div className="font-semibold text-3xl">Menu</div>
-            <div>
-              <Image
-                src={logo}
-                alt="Logo"
-                width={200}
-                height={200}
-              />
-            </div>
-            <div className="font-semibold text-3xl">Cart</div>
-          </nav>
-        </div>
+        <Navbar />
 
         <section className="w-full h-[580px] bg-[#FED9D9] text-center flex flex-col items-center relative">
           <h1 className="text-[26px] sm:text-[30px] font-normal mt-20 w-3/4 ----------- md:text-[34px] md:mt-32  md:w-[600px] tracking-wider leading-12 ">Your curated collection of diyas, candles, diffusers & room freshners</h1>
@@ -68,10 +38,10 @@ export default function Home() {
             </div>
             <div>
               <div className="rounded-full w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] md:w-[340px] md:h-[340px] lg:w-[360px] lg:h-[360px] flex items-center justify-center border-[#d89687] border-[7px]">
-                  <div className="rounded-full w-60 h-60 sm:w-[280px] sm:h-[280px] md:w-80 md:h-80 lg:w-[340px] lg:h-[340px] flex items-center justify-center overflow-hidden bg-amber-100">
-                    <Image src={heroImage} alt="Product 1" width={340} height={340} className="hover:scale-110 transition-transform duration-500" />
-                  </div>
+                <div className="rounded-full w-60 h-60 sm:w-[280px] sm:h-[280px] md:w-80 md:h-80 lg:w-[340px] lg:h-[340px] flex items-center justify-center overflow-hidden bg-amber-100">
+                  <Image src={heroImage} alt="Product 1" width={340} height={340} className="hover:scale-110 transition-transform duration-500" />
                 </div>
+              </div>
 
             </div>
           </div>
