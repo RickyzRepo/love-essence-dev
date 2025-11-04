@@ -1,9 +1,60 @@
-import Image from 'next/image';
-import heroImage from '../picture/Flower_banner_png.png';
+"use client"
 
-export default async function ProductPage({ params }) {
-    const { productid } = await params;
-    console.log("Product ID:", productid);
+import Image from 'next/image';
+import { useState } from 'react';
+
+export default function ProductPage({ }) {
+
+    const [loading, setLoading] = useState(true);
+
+    const handleBuyNow = async () => {
+        setLoading(true);
+
+        const orderRes = await fetch("http://localhost:3000/api/payment/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: 499 }),
+        });
+
+        const { id, amount } = await orderRes.json();
+
+        const options = {
+            key: 'KEY_ID', // public key (store in frontend .env)
+            amount: amount / 100,
+            currency: "INR",
+            name: "Shreyo Store",
+            description: "Test Purchase",
+            order_id: id,
+            handler: async (response) => {
+                console.log(response);
+                const verifyRes = await fetch("http://localhost:3000/api/payment/verify", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        order_id: response.razorpay_order_id,
+                        payment_id: response.razorpay_payment_id,
+                        signature: response.razorpay_signature,
+                    }),
+                });
+                const data = await verifyRes.json();
+                if (data) alert("Payment Successful!");
+                else alert("Payment Verification Failed!");
+            },
+            prefill: {
+                name: "Shreyo Paul",
+                email: "shreyo@example.com",
+                contact: "9999999999",
+            },
+            theme: { color: "#3399cc" },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+        setLoading(false);
+    };
+
+
+
     return (
         <div className="bg-white flex flex-col md:flex-row justify-start items-center gap-12 w-[90%] md:w-3/4 min-h-[70vh] md:min-h-[65vh] my-8 md:my-12 p-8 md:p-10 rounded-3xl shadow-md overflow-hidden relative">
 
@@ -14,7 +65,7 @@ export default async function ProductPage({ params }) {
                 <div className="relative w-full h-full">
                     <Image
                         src="https://picsum.photos/500"
-                        alt={`Product ${productid}`}
+                        alt={`Product`}
                         fill
                         className="object-cover rounded-2xl"
                     />
@@ -38,8 +89,8 @@ export default async function ProductPage({ params }) {
                 </div>
 
                 <div className="flex flex-col lg:flex-row md:flex-col sm:flex-row gap-8 items-center justify-between">
-                    <span className="text-2xl font-semibold text-[#A35646]">$29.99</span>
-                    <button className=" bg-[#C6816F] hover:bg-[#C27C6C] text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-sm">
+                    <span className="text-2xl font-semibold text-[#A35646]">Rs. 29.99</span>
+                    <button className=" bg-[#C6816F] hover:bg-[#C27C6C] text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-sm" onClick={() => handleBuyNow(500)}>
                         Add to Cart
                     </button>
                 </div>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
+import Script from 'next/script';
 
 export async function generateMetadata({ params }) {
     const { productid } = await params;
@@ -21,6 +22,7 @@ export default async function ProductLayout({ children, params }) {
                 <div className='w-full flex items-center justify-center'>
                     {children}
                 </div>
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" /> {/* Razorpay Script for Window Object setup */}
             </main>
         </div>
     );
