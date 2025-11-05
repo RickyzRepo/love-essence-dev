@@ -2,17 +2,24 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export default function ProductPage({ }) {
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [cookie, setCookie] = useState(Cookies.get('session') || null);
 
     const handleBuyNow = async () => {
         setLoading(true);
 
+        console.log("Cookie:", cookie);
+
         const orderRes = await fetch("http://localhost:3000/api/payment/create-order", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${cookie}`,
+            },
             body: JSON.stringify({ amount: 499 }),
         });
 
@@ -29,15 +36,17 @@ export default function ProductPage({ }) {
                 console.log(response);
                 const verifyRes = await fetch("http://localhost:3000/api/payment/verify", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": `Bearer ${cookie}`,
+                    }, body: JSON.stringify({
                         order_id: response.razorpay_order_id,
                         payment_id: response.razorpay_payment_id,
                         signature: response.razorpay_signature,
                     }),
                 });
                 const data = await verifyRes.json();
-                if (data) alert("Payment Successful!");
+                if (data) console.log("Payment Successful!");
                 else alert("Payment Verification Failed!");
             },
             prefill: {
@@ -91,7 +100,7 @@ export default function ProductPage({ }) {
                 <div className="flex flex-col lg:flex-row md:flex-col sm:flex-row gap-8 items-center justify-between">
                     <span className="text-2xl font-semibold text-[#A35646]">Rs. 29.99</span>
                     <button className=" bg-[#C6816F] hover:bg-[#C27C6C] text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-sm" onClick={() => handleBuyNow(500)}>
-                        Add to Cart
+                        {!loading ? "Add to Cart" : "Loading..."}
                     </button>
                 </div>
 
